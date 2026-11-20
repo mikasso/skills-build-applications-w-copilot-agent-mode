@@ -10,12 +10,10 @@ afterEach(() => {
 
 describe('CapabilityCard', () => {
   it('announces an error when the API response is missing its collection', async () => {
-    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ items: [] }), { status: 200 })));
-
     render(<CapabilityCard<{ name: string }>
       title="Teams"
       description="Manage teams and members."
-      endpoint="/api/teams"
+      load={async () => ({ items: [] })}
       resource="teams"
       emptyMessage="No teams yet."
       renderItem={(team) => team.name}

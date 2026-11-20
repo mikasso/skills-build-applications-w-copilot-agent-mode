@@ -1,3 +1,4 @@
+import { getJson } from '../api/client.js';
 import { CapabilityCard } from './CapabilityCard.js';
 
 type WorkoutSuggestion = {
@@ -9,12 +10,15 @@ type WorkoutSuggestion = {
 };
 
 const userEmail = 'mona@example.com';
+const loadWorkoutSuggestions = () => getJson<{ suggestions: WorkoutSuggestion[] }>(
+  `/api/workouts/suggestions/${encodeURIComponent(userEmail)}`,
+);
 
 export default function Workouts() {
   return <CapabilityCard<WorkoutSuggestion>
     title="Workout suggestions"
     description="Recommend workouts from activity patterns."
-    endpoint={`/api/workouts/suggestions/${encodeURIComponent(userEmail)}`}
+    load={loadWorkoutSuggestions}
     resource="suggestions"
     emptyMessage="No workout suggestions available."
     renderItem={(suggestion) => <>{suggestion.title}{suggestion.focus && ` — ${suggestion.focus}`}
